@@ -9,21 +9,25 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/employee")
 @AllArgsConstructor
 public class EmployeeController {
     private final EmployeeService employeeService;
 
+
+
     @GetMapping("/all")
-    public ResponseEntity<List<Employee>> getAllEmployees() {
+    public ResponseEntity<List<Employee>> getAllEmployees () {
         List<Employee> employees = employeeService.finalAllEmployees();
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
     @GetMapping("/find/{id}")
-    public Employee getEmployeeById(@PathVariable("id") Long id) {
-        return employeeService.findEmployeeById(id);
+    public ResponseEntity<Employee> getEmployeeById (@PathVariable("id") Long id) {
+        Employee employee = employeeService.findEmployeeById(id);
+        return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 
     @PostMapping("/add")
@@ -38,10 +42,9 @@ public class EmployeeController {
         return new ResponseEntity<>(updateEmployee, HttpStatus.OK);
     }
 
-    @DeleteMapping("/update/{id}")
-    public ResponseEntity<?> deleteEmployee(@RequestBody Long id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteEmployee(@PathVariable("id") Long id) {
         employeeService.deleteEmployee(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
